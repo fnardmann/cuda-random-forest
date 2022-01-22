@@ -31,11 +31,20 @@ void DecisionTree::fit(
     const auto& labelset = std::set<unsigned int>(labels.begin(), labels.end());
     _uniquelabels = Labels(labelset.begin(), labelset.end());
 
+    std::pair<Labels, Labels> bestsplit;
+    double bestscore = __DBL_MAX__;
+
     // test impurity for each possible split
     for (const Feature& feature : features)
     {
         const std::pair<Labels, Labels>& split = impurity_split(feature, labels);
         const double score = impurity_score(split);
+
+        if (score > bestscore)
+        {
+            bestscore = score;
+            bestsplit = split;
+        }
     }
 }
 
