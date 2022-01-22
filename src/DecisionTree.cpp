@@ -52,14 +52,14 @@ std::pair<Labels, Labels> DecisionTree::impurity_split(
     const Feature& feature,
     const Labels& labels) 
 {
-    if (_ifunction == "Entropy") return entropy_split(feature, labels);
+    if (_ifunction == "entropy") return entropy_split(feature, labels);
 
     else throw std::invalid_argument("no valid impurity function");
 }   
 
 double DecisionTree::impurity_score(const std::pair<Labels, Labels>& split) 
 {
-    if (_ifunction == "Entropy")
+    if (_ifunction == "entropy")
     {
         return entropy_score(split.first) + entropy_score(split.second);
     } 

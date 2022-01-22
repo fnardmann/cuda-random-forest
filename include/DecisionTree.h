@@ -9,7 +9,7 @@ class DecisionTree
 {
 public:
 
-    DecisionTree(const std::string& impurity_function);
+    DecisionTree(const std::string& impurity_function = "entropy");
 
     void fit(
         const std::vector<Feature>& features,
