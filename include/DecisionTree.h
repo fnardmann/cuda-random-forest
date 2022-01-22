@@ -9,7 +9,11 @@ class DecisionTree
 {
 public:
 
-    DecisionTree(const std::string& impurity_function = "entropy");
+    DecisionTree(
+        const std::string& impurity_function = "entropy",
+        const std::string& maxfeatures = "sqrt",
+        const unsigned int maxdepth = INT8_MAX
+    );
 
     void fit(
         const std::vector<Feature>& features,
@@ -44,6 +48,9 @@ private:
     );
 
     std::string _ifunction;
+    std::string _maxfeatures;
+    unsigned int _maxdepth;
+
     Labels _uniquelabels;
 
 };

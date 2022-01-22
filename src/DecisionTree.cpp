@@ -8,8 +8,11 @@
 
 #include <math.h>
 
-DecisionTree::DecisionTree(const std::string& impurity_function)
-    : _ifunction(impurity_function)
+DecisionTree::DecisionTree(
+    const std::string& impurity_function,
+    const std::string& maxfeatures,
+    const unsigned int maxdepth)
+    : _ifunction(impurity_function), _maxfeatures(maxfeatures), _maxdepth(maxdepth)
 {
     
 }
