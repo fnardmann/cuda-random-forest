@@ -91,8 +91,6 @@ double DecisionTree::entropy_score(const Labels& leaf)
             score += ((labelsize/totalsize) * log(labelsize/totalsize)); 
     }
 
-    std::cout << "Entropy score: " << -score << std::endl;
-
     return -score;
 }
 
