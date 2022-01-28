@@ -14,7 +14,7 @@ int main(int argc, char** argv)
         {true, false, true, false, true, false, true, false, true, false}
     };
 
-    DecisionTree dt("entropy");
+    DecisionTree dt;
 
     dt.fit(features, labels);
 
