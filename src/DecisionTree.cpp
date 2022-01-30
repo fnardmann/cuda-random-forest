@@ -11,11 +11,23 @@ Split::Split(
     const Indices& indices,
     const Labels& l,
     const std::vector<Feature>& f)
+    : labels(), features()
 {
+    // add (empty) features vectors
+    for(unsigned int i = 0; i < f.size(); i++)
+    {
+        features.push_back(Feature());
+    }
+
     for(const unsigned int idx : indices)
     {
         labels.push_back(l[idx]);
-        features.push_back(f[idx]);
+
+        // add each feature at this index
+        for(unsigned int i = 0; i < f.size(); i++)
+        {
+            features[i].push_back(f[i][idx]);
+        }
     }
 }
 
@@ -118,7 +130,7 @@ void DecisionTree::split(
 
     // create Splits with indices from bestsplit
     Split a(bestsplit.first, labels, features);
-    Split b(bestsplit.first, labels, features);
+    Split b(bestsplit.second, labels, features);
 
     // call this method recursively for splitted labels
     split(a.features, a.labels, node);
