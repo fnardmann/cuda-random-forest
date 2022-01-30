@@ -7,6 +7,18 @@
 #include <numeric>
 #include <cmath>
 
+Split::Split(
+    const Indices& indices,
+    const Labels& l,
+    const std::vector<Feature>& f)
+{
+    for(const unsigned int idx : indices)
+    {
+        labels.push_back(l[idx]);
+        features.push_back(f[idx]);
+    }
+}
+
 DecisionNode::DecisionNode()
     : _splitfeatureID(-1), _children()
 {
@@ -70,12 +82,12 @@ void DecisionTree::split(
     // TODO: function to get actual depth of tree
     // if (depth > _maxdepth) return;
 
-    std::vector<unsigned int> indices(features.size());
+    Indices indices(features.size());
     std::iota(indices.begin(), indices.end(), 0);
     std::shuffle(indices.begin(), indices.end(), _g);
     // indices represents randomly shuffled indices of features
 
-    std::pair<Labels, Labels> bestsplit;
+    std::pair<Indices, Indices> bestsplit;
     double bestscore = __DBL_MAX__;
     int bestsplitfeature = -1; // index of feature producing the best split
 
@@ -86,7 +98,7 @@ void DecisionTree::split(
         // get index from randomly sampled indices vector
         const unsigned idx = indices[i];
 
-        const std::pair<Labels, Labels>& split = impurity_split(features[idx], labels);
+        const std::pair<Indices, Indices>& split = impurity_split(features[idx], labels);
         const double score = impurity_score(split);
 
         if (score < bestscore)
@@ -101,15 +113,19 @@ void DecisionTree::split(
     // shared pointer to keep track of tree
     std::shared_ptr<DecisionNode> node = std::make_shared<DecisionNode>(bestsplitfeature);
 
-    if (parent->empty()) parent = node;
+    if (!parent) parent = node;
     else parent->addChild(*node.get());
 
+    // create Splits with indices from bestsplit
+    Split a(bestsplit.first, labels, features);
+    Split b(bestsplit.first, labels, features);
+
     // call this method recursively for splitted labels
-    split(features, bestsplit.first, node);
-    split(features, bestsplit.second, node);
+    split(a.features, a.labels, node);
+    split(b.features, b.labels, node);
 }
 
-std::pair<Labels, Labels> DecisionTree::impurity_split(
+std::pair<Indices, Indices> DecisionTree::impurity_split(
     const Feature& feature,
     const Labels& labels) 
 {
@@ -130,16 +146,16 @@ double DecisionTree::impurity_score(
 
 }
 
-std::pair<Labels, Labels> DecisionTree::entropy_split(
+std::pair<Indices, Indices> DecisionTree::entropy_split(
     const Feature& feature,
     const Labels& labels) 
 {
-    Labels lhs;
-    Labels rhs;
+    Indices lhs;
+    Indices rhs;
 
     for (unsigned int i = 0; i < feature.size(); i++)
     {
-        feature[i] ? lhs.push_back(labels[i]) : rhs.push_back(labels[i]);
+        feature[i] ? lhs.push_back(i) : rhs.push_back(i);
     }
 
     return std::make_pair(lhs, rhs);

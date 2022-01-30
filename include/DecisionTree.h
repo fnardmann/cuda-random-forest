@@ -4,8 +4,23 @@
 #include <memory>
 #include <random>
 
+typedef std::vector<unsigned int> Indices;
 typedef std::vector<unsigned int> Labels;
 typedef std::vector<bool> Feature;
+
+class Split
+{
+public:
+
+    Split(
+        const Indices& indices,
+        const Labels& l,
+        const std::vector<Feature>& f
+    );
+
+    std::vector<Feature> features;
+    Labels labels;
+};
 
 class DecisionNode 
 {
@@ -56,7 +71,7 @@ private:
         std::shared_ptr<DecisionNode> parent
     );
 
-    std::pair<Labels, Labels> impurity_split(
+    std::pair<Indices, Indices> impurity_split(
         const Feature& feature,
         const Labels& labels
     );
@@ -65,8 +80,8 @@ private:
         const std::pair<Labels, Labels>& split
     );
 
-    std::pair<Labels, Labels> entropy_split(
-        const Feature& ,
+    std::pair<Indices, Indices> entropy_split(
+        const Feature&,
         const Labels& labels
     );
 
