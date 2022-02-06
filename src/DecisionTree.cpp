@@ -49,10 +49,11 @@ DecisionTree::DecisionTree(
     const std::string& impurity_function,
     const std::string& maxfeatures,
     const unsigned int maxdepth,
-    const unsigned int maxleafs)
+    const unsigned int maxleafs,
+    const unsigned int minsplitsamples)
     : _ifunction(impurity_function), _maxfeatures(maxfeatures), 
-      _maxdepth(maxdepth), _maxleafs(maxleafs), _numfeatures(0), 
-      _g((std::random_device())()), _root()
+      _maxdepth(maxdepth), _maxleafs(maxleafs), _minsplitsamples(minsplitsamples),
+      _numfeatures(0), _g((std::random_device())()), _root()
 {
     
 }
@@ -112,6 +113,11 @@ void DecisionTree::split(
         const unsigned idx = indices[i];
 
         const std::pair<Indices, Indices>& split = impurity_split(features[idx]);
+
+        // check for min samples
+        if (split.first.size() < _minsplitsamples || split.second.size() < _minsplitsamples)
+            continue;
+
         const double score = impurity_score(split);
 
         std::cout << "score: " << score << std::endl;

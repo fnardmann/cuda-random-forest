@@ -48,7 +48,8 @@ public:
         const std::string& impurity_function = "entropy",
         const std::string& maxfeatures = "sqrt",
         const unsigned int maxdepth = INT8_MAX,
-        const unsigned int maxleafs = 2 // binary for now
+        const unsigned int maxleafs = 2, // binary for now
+        const unsigned int minsplitsamples = 2
     );
 
     void fit(
@@ -88,6 +89,7 @@ private:
     std::string _maxfeatures;
     unsigned int _maxdepth;
     unsigned int _maxleafs;
+    unsigned int _minsplitsamples;
 
     unsigned int _numfeatures;
 
