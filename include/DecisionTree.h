@@ -1,12 +1,10 @@
-#include <vector>
+#include <IO.h>
+
 #include <utility>
-#include <string>
 #include <memory>
 #include <random>
 
 typedef std::vector<unsigned int> Indices;
-typedef std::vector<unsigned int> Labels;
-typedef std::vector<bool> Feature;
 
 class Split
 {
@@ -14,12 +12,12 @@ public:
 
     Split(
         const Indices& indices,
-        const Labels& l,
-        const std::vector<Feature>& f
+        const std::vector<Label>& l,
+        const std::vector<std::vector<Feature>>& f
     );
 
-    std::vector<Feature> features;
-    Labels labels;
+    std::vector<std::vector<Feature>> features;
+    std::vector<Label> labels;
 };
 
 class DecisionNode 
@@ -54,8 +52,7 @@ public:
     );
 
     void fit(
-        const std::vector<Feature>& features,
-        const Labels& labels
+        const Data& data
     );
 
     std::vector<unsigned int> predict(
@@ -66,27 +63,25 @@ public:
 private:
 
     void split(
-        const std::vector<Feature>& features,
-        const Labels& labels,
+        const std::vector<std::vector<Feature>>& features,
+        const std::vector<Label>& labels,
         std::shared_ptr<DecisionNode> parent
     );
 
     std::pair<Indices, Indices> impurity_split(
-        const Feature& feature,
-        const Labels& labels
+        const std::vector<Feature>& feature
     );
 
     double impurity_score(
-        const std::pair<Labels, Labels>& split
+        const std::pair<std::vector<Label>, std::vector<Label>>& split
     );
 
     std::pair<Indices, Indices> entropy_split(
-        const Feature&,
-        const Labels& labels
+        const std::vector<Feature>&
     );
 
     double entropy_score(
-        const Labels& leaf
+        const std::vector<Label>& leaf
     );
 
     std::string _ifunction;
@@ -96,7 +91,7 @@ private:
 
     unsigned int _numfeatures;
 
-    Labels _uniquelabels;
+    std::vector<Label> _uniquelabels;
     std::shared_ptr<DecisionNode> _root;
 
     std::mt19937 _g; // random generator

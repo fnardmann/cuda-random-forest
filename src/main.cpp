@@ -5,17 +5,12 @@
 
 int main(int argc, char** argv)
 {
-    // test data with 2 classes and 2 binary features each
-    std::vector<unsigned int> labels = {0, 0, 0, 0, 0, 0, 1, 1, 1, 1};
+    const std::string path = "/home/felix/Desktop/data/haberman.data";
 
-    std::vector<std::vector<bool>> features = 
-    {
-        {true, true, true, false, true, true, false, false, false, false},
-        {true, false, true, false, true, false, true, false, true, false}
-    };
+    const Data& data = IO::read(path);
 
     DecisionTree dt;
 
-    dt.fit(features, labels);
+    dt.fit(data);
 
 }
